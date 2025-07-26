@@ -1,43 +1,121 @@
-/* base.css */
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: #f8f9fa;
-  color: #343a40;
+/* src/assets/base.css */
+
+/* 1. 定义色彩和字体变量 */
+:root {
+  --primary-color: #3E8A86;
+  --primary-hover-color: #6DB3AF;
+  --background-color: #FCFBF8;
+  --text-color: #4A4A4A;
+  --subtle-bg-color: #F0F2EE;
+  --dark-bg-color: #2F4F4F;
+  --border-color: #e0e0e0;
+  --footer-text-color: rgba(255, 255, 255, 0.85);
+  --footer-heading-color: #FFFFFF;
+
+  /* *** 新增：字体变量 *** */
+  --font-family-sans: 'Nunito Sans', sans-serif;
+  --font-family-heading: 'Poppins', sans-serif;
 }
 
-.card {
-  border: 1px solid #e9ecef;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+/* 2. 应用全局样式 */
+body {
+  /* *** 变化在这里：应用新字体和更大的字号 *** */
+  font-family: var(--font-family-sans);
+  font-size: 17px; /* 调大基础字号，16px 是浏览器默认值 */
+  line-height: 1.6; /* 增加行高，提升可读性 */
+  background-color: var(--background-color);
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased; /* 让字体在 Mac 上看起来更平滑 */
+  -moz-osx-font-smoothing: grayscale; /* 让字体在 Firefox 上看起来更平滑 */
+}
+
+/* *** 变化在这里：为标题应用 Poppins 字体 *** */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-heading);
+  font-weight: 700; /* 标题使用更粗的字重 */
+  color: var(--text-color);
+}
+
+/* 调整标题的默认大小 */
+h1, .h1 { font-size: 2.5rem; }
+h2, .h2 { font-size: 2rem; }
+h3, .h3 { font-size: 1.75rem; }
+h4, .h4 { font-size: 1.5rem; }
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 700; /* 让链接文字也稍微加粗，更易识别 */
+}
+
+a:hover {
+  color: var(--primary-hover-color);
+  text-decoration: none;
+}
+
+/* 3. 覆盖 Bootstrap 组件的默认样式 */
+
+/* 按钮也使用标题字体，显得更有力 */
+.btn {
+    font-family: var(--font-family-heading);
+    font-weight: 500;
 }
 
 .btn-primary {
-    background-color: #585858;
-    border-color: #585858;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .btn-primary:hover {
-    background-color: #333;
-    border-color: #333;
+  background-color: var(--primary-hover-color);
+  border-color: var(--primary-hover-color);
 }
 
-/* 自定义响应式样式 */
+/* ... (其他样式保持不变) ... */
 
-/* 对于平板及更小屏幕 (小于 992px) */
-@media (max-width: 991.98px) {
-  .hero-section h1 {
-    font-size: 2.5rem; /* 在中等屏幕上缩小英雄区的标题 */
-  }
+.btn-outline-secondary {
+    border-color: var(--border-color);
+    color: var(--text-color);
 }
 
-/* 对于手机 (小于 768px) */
-@media (max-width: 767.98px) {
-  .hero-section {
-    padding: 2rem 1rem !important; /* 减少手机上的内边距 */
-  }
-  .hero-section h1 {
-    font-size: 2rem; /* 在手机上进一步缩小标题 */
-  }
-  .hero-section p {
-    font-size: 1rem;
-  }
+.btn-outline-secondary:hover {
+    background-color: #f0f0f0;
+}
+
+.card {
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.list-group-item.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-control:focus {
+  border-color: var(--primary-hover-color);
+  box-shadow: 0 0 0 0.25rem rgba(62, 138, 134, 0.25);
+}
+
+.bg-dark {
+    background-color: var(--dark-bg-color) !important;
+}
+
+/* 4. 页脚样式 */
+footer.bg-dark {
+  color: var(--footer-text-color);
+}
+
+footer.bg-dark h6 {
+  color: var(--footer-heading-color);
+}
+
+footer.bg-dark a {
+  color: var(--footer-heading-color);
+  font-weight: 400; /* 页脚链接使用正常字重 */
+  transition: color 0.2s ease-in-out;
+}
+
+footer.bg-dark a:hover {
+  color: var(--primary-hover-color);
 }

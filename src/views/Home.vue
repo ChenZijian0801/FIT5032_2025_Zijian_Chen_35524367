@@ -1,12 +1,20 @@
 <template>
   <div>
-    <div class="hero-section text-center p-5 mb-4 bg-light rounded-3">
-      <h1 class="display-4 fw-bold">Your Safe Space for Mental Wellness</h1>
-      <p class="fs-4">Find support, resources, and community. You are not alone.</p>
-      
-      <router-link :to="userStore.user.isLoggedIn ? '/community' : '/register'" class="btn btn-primary btn-lg mt-3">
-        Join Our Community
-      </router-link>
+    <div class="hero-section p-5 mb-4 bg-light rounded-3">
+      <div class="container-fluid">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-6">
+            <h1 class="display-4 fw-bold">Your Safe Space for Mental Wellness</h1>
+            <p class="fs-4">Find support, resources, and community. You are not alone.</p>
+            <router-link :to="userStore.user.isLoggedIn ? '/community' : '/register'" class="btn btn-primary btn-lg mt-3">
+              Join Our Community
+            </router-link>
+          </div>
+          <div class="col-lg-6">
+            <img :src="heroImage" class="img-fluid rounded-3 shadow-lg" alt="Mental Health Concept">
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="row text-center g-4">
@@ -42,16 +50,15 @@
 </template>
 
 <script setup>
-// *** 变化在这里 ***
-// 导入 useUserStore 以便在模板中访问登录状态
 import { useUserStore } from '@/stores/userStore';
+import heroImage from '@/assets/images/hero-image.jpg';
 
-// 获取 userStore 实例
 const userStore = useUserStore();
 </script>
 
 <style scoped>
+/* 使用在 base.css 中定义的 CSS 变量 */
 .hero-section {
-  background-color: #e9ecef;
+  background-color: var(--subtle-bg-color);
 }
 </style>

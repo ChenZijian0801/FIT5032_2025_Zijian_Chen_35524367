@@ -27,9 +27,6 @@ const router = useRouter();
 
 const handleLogin = () => {
   userStore.login(email.value, password.value);
-  
-  // *** 变化在这里 ***
-  // 登录后，直接跳转到 community 页面，而不是首页。
-  router.push('/community'); 
+  router.push('/');
 };
 </script>
