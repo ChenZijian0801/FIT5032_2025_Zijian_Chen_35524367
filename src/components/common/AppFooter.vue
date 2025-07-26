@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-dark pt-5 pb-4 mt-auto">
+  <footer class="bg-dark text-white pt-5 pb-4 mt-auto">
     <div class="container text-center text-md-start">
       <div class="row">
         <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
@@ -20,25 +20,28 @@
         <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
           <h6 class="text-uppercase fw-bold">Contact</h6>
            <hr class="mb-4 mt-0 d-inline-block mx-auto" :style="{ backgroundColor: 'var(--primary-hover-color)', height: '2px', width: '60px', border: 'none' }"/>
-          <p>Singapore</p>
+          <p>Suzhou</p>
           <p>contact@formentalhealth.org</p>
         </div>
       </div>
     </div>
      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
-      © 2025 Copyright: For Mental Health. Current time in Singapore is {{currentTime}}.
+      © 2025 Copyright: For Mental Health. Current time in Suzhou is {{currentTime}}.
     </div>
   </footer>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 const currentTime = ref('');
+let timer = null;
 
 const updateTime = () => {
-    currentTime.value = new Intl.DateTimeFormat('en-SG', {
-        timeZone: 'Asia/Singapore',
+    currentTime.value = new Intl.DateTimeFormat('en-US', { // 使用 en-US 或 en-GB 格式化
+        // *** 变化在这里 (3/3) ***
+        // 中国标准时间的 IANA 时区标识符是 Asia/Shanghai
+        timeZone: 'Asia/Shanghai',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -51,6 +54,13 @@ const updateTime = () => {
 
 onMounted(() => {
     updateTime();
-    setInterval(updateTime, 1000);
+    timer = setInterval(updateTime, 1000);
+});
+
+
+onUnmounted(() => {
+    if (timer) {
+        clearInterval(timer);
+    }
 });
 </script>
