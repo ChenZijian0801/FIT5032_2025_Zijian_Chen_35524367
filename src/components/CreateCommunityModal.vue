@@ -51,18 +51,18 @@ const props = defineProps({
 
 const emit = defineEmits(['community-created']);
 
-// 表单数据
+
 const name = ref('');
 const description = ref('');
-const imagePreviewUrl = ref(null); // 用于存储图片预览的临时URL
-let selectedFile = null; // 用于存储实际的文件对象
+const imagePreviewUrl = ref(null); 
+let selectedFile = null; 
 
-// *** 新增文件选择处理函数 ***
+
 const handleFileSelect = (event) => {
   const file = event.target.files[0];
   if (file) {
     selectedFile = file;
-    // 使用 FileReader API 创建一个临时的URL用于预览
+
     imagePreviewUrl.value = URL.createObjectURL(file);
   } else {
     selectedFile = null;
@@ -77,8 +77,7 @@ const handleCreate = () => {
     return;
   }
 
-  // 在真实应用中，这里会先上传 selectedFile 到服务器，然后用服务器返回的永久URL
-  // 在我们的模拟中，我们直接使用临时的预览URL
+
   const finalImageUrl = imagePreviewUrl.value || `https://via.placeholder.com/400x200?text=${name.value.replace(/\s/g, '+')}`;
 
   emit('community-created', {
@@ -89,12 +88,12 @@ const handleCreate = () => {
     isOwner: true
   });
 
-  // 清空表单和预览
+ 
   name.value = '';
   description.value = '';
   imagePreviewUrl.value = null;
   selectedFile = null;
-  // 重置文件输入框
+
   document.getElementById('community-image-file').value = '';
 };
 </script>

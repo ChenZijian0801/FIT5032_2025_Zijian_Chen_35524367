@@ -1,12 +1,4 @@
-非常抱歉，这是我的疏忽！
 
-您指出的这个问题完全是我的错误。在我上次为您提供完整代码时，我不小心用占位符注释替换了“图书推荐”和“知识百科”这两个板块的实际内容，导致它们变空了。当您点击这两个选项卡时，程序逻辑是正确的，但因为没有内容可以显示，所以右侧区域就变成了一片空白。
-
-再次为我的失误向您道歉。下面是 **`src/views/KnowledgeHub.vue`** 文件的**完整且正确**的版本，其中包含了所有三个板块的内容。
-
-请用下面的代码**完整替换**您现有的 `src/views/KnowledgeHub.vue` 文件，问题就能解决了。
-
-```vue
 <template>
   <div class="container mt-4">
     <h1 class="mb-4">Knowledge Hub</h1>
@@ -44,13 +36,11 @@
         <div v-if="activeView === 'books'">
           <h3 class="mb-3">Book Recommendations</h3>
           <p class="text-muted">Curated books to help you on your journey.</p>
-          <div class="row g-4">
-            <div class="col-md-6" v-for="book in books" :key="book.id">
-              <BookRating :book="book" />
-            </div>
+          <div class="vstack gap-4">
+            <BookRating v-for="book in books" :key="book.id" :book="book" />
           </div>
         </div>
-
+        
         <div v-if="activeView === 'encyclopedia'">
           <h3 class="mb-3">Mental Health Encyclopedia</h3>
           <p class="text-muted">Quick answers to common questions about mental wellness.</p>
@@ -102,13 +92,66 @@ import { ref } from 'vue';
 import BookRating from '@/components/BookRating.vue';
 import relaxAudio from '@/assets/audio/just-relax-11157.mp3';
 
-// 控制当前显示哪个视图
-const activeView = ref('books'); // 默认显示图书推荐
+// *** 变化在这里：导入您本地的图片资源 ***
+import imgBodyKeepsScore from '@/assets/images/The Body Keeps the Score.jpg';
+import imgTalkToSomeone from '@/assets/images/Maybe You Should Talk to Someone.jpg';
+import imgSearchForMeaning from '@/assets/images/Search for Meaning.jpg';
+import imgPatientGuide from '@/assets/images/Patient Guide to Mood and Anxiety.jpg';
+import imgSolutionsToPanic from '@/assets/images/10 Simple Solutions to Panic.jpg';
 
-// 图书推荐数据
+const activeView = ref('books');
+
+// *** 变化在这里：在数据中使用导入的图片变量 ***
 const books = ref([
-    { id: 1, title: 'Patient Guide to Mood and Anxiety', author: 'Charles B. Nemeroff', avgRating: 4.5 },
-    { id: 2, title: '10 Simple Solutions to Panic', author: 'Martin M. Antony', avgRating: 4.8 }
+    { 
+      id: 1, 
+      title: 'The Body Keeps the Score', 
+      author: 'Bessel van der Kolk', 
+      avgRating: 4.8, 
+      img: imgBodyKeepsScore,
+      description: 'Explores how trauma reshapes both body and brain, compromising sufferers\' capacities for pleasure, engagement, self-control, and trust.'
+    },
+    { 
+      id: 2, 
+      title: 'Atomic Habits', 
+      author: 'James Clear', 
+      avgRating: 4.9, 
+      // 对于您本地没有的图片，暂时保留网络链接是可行的
+      img: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385l/40121378.jpg',
+      description: 'An easy & proven way to build good habits & break bad ones, essential for building routines that support mental well-being.'
+    },
+    {
+      id: 3, 
+      title: 'Maybe You Should Talk to Someone',
+      author: 'Lori Gottlieb',
+      avgRating: 4.7,
+      img: imgTalkToSomeone,
+      description: 'A therapist, reeling from a personal crisis, finds herself on the other side of the couch with her own therapist.'
+    },
+    {
+      id: 4,
+      title: 'Man\'s Search for Meaning',
+      author: 'Viktor E. Frankl',
+      avgRating: 4.6,
+      img: imgSearchForMeaning,
+      description: 'A classic tribute to hope from the Holocaust, arguing that we cannot avoid suffering but we can choose how to cope with it.'
+    },
+    { 
+      id: 5, 
+      title: 'Patient Guide to Mood and Anxiety', 
+      author: 'Charles B. Nemeroff', 
+      avgRating: 4.5, 
+      img: imgPatientGuide,
+      description: 'A comprehensive guide that offers insights into the causes, symptoms, and treatments for mood and anxiety disorders.'
+    },
+    { 
+      id: 6, 
+      title: '10 Simple Solutions to Panic', 
+      author: 'Martin M. Antony', 
+      avgRating: 4.8, 
+      img: imgSolutionsToPanic,
+      description: 'Provides easy-to-implement strategies and techniques for managing panic attacks and living a more peaceful life.'
+    }
 ]);
 
 // 心理知识百科数据
@@ -132,7 +175,6 @@ const encyclopedia = ref([
 </script>
 
 <style scoped>
-/* Scoped styles */
 .list-group-item.active {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
