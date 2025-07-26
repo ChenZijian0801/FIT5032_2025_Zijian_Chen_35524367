@@ -1,3 +1,4 @@
+
 <template>
   <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -7,6 +8,7 @@
         class="btn btn-primary" 
         data-bs-toggle="modal" 
         data-bs-target="#createCommunityModal"
+        @click="checkAdminPermission"
       >
         <i class="bi bi-plus-circle me-2"></i>Create Community
       </button>
@@ -50,8 +52,19 @@ import { ref } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import CreateCommunityModal from '@/components/CreateCommunityModal.vue';
 
-
 const userStore = useUserStore();
+
+// *** 变化在这里：创建了新的权限检查函数 ***
+const checkAdminPermission = (event) => {
+  // 检查用户角色是否不是 'admin'
+  if (userStore.user.role !== 'admin') {
+    // 如果不是管理员，阻止 Bootstrap 默认的打开弹窗行为
+    event.preventDefault();
+    // 并给出提示
+    alert('Access Denied: Only administrators can create new communities.');
+  }
+  // 如果是管理员，则什么也不做，让 Bootstrap 的 data-* 属性正常工作
+};
 
 const communities = ref([
   {
@@ -79,11 +92,7 @@ const communities = ref([
 
 const addNewCommunity = (newCommunity) => {
   communities.value.unshift(newCommunity);
-  const modalElement = document.getElementById('createCommunityModal');
-  const modalInstance = bootstrap.Modal.getInstance(modalElement);
-  if (modalInstance) {
-    modalInstance.hide();
-  }
+  // 现在我们不再需要用JS来手动关闭模态框了，Bootstrap会自己处理
 };
 
 const deleteCommunity = (communityIdToDelete) => {
