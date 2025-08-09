@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import { createApp } from 'vue'
@@ -21,13 +20,3 @@ app.use(PrimeVue, { theme: { preset: Aura } })
 app.use(router)
 
 app.mount('#app')
-
-=======
-import './assets/main.css'
-
-import { createApp } from 'vue'
-import App from './App.vue'
-//import './style.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-createApp(App).mount('#app')
->>>>>>> 1a06f5027117fb439b709548846240d75310e8b7
