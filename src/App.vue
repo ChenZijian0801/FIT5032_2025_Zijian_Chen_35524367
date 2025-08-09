@@ -1,4 +1,5 @@
 <script setup>
+<<<<<<< HEAD
 
 import BHeader from './components/BHeader.vue' 
 </script>
@@ -13,10 +14,21 @@ import BHeader from './components/BHeader.vue'
       <router-view></router-view>
     </main>
   </div>
+=======
+import JSON from './components/JSON.vue'; 
+import Form from "./components/Form.vue";
+</script>
+
+<template>
+ 
+   
+  <Form/>
+>>>>>>> 1a06f5027117fb439b709548846240d75310e8b7
 </template>
 
 <style>
 
+<<<<<<< HEAD
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -41,4 +53,14 @@ body {
   margin-bottom: 1.5rem; 
 }
 
+=======
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px; 
+}
+>>>>>>> 1a06f5027117fb439b709548846240d75310e8b7
 </style>
