@@ -39,7 +39,7 @@ let timer = null;
 
 const updateTime = () => {
     currentTime.value = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'Asia/Shanghai', // Suzhou's time zone
+        timeZone: 'Asia/Shanghai',
         year: 'numeric',
         month: 'long',
         day: 'numeric',

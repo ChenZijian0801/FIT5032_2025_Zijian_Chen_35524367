@@ -1,6 +1,21 @@
 <template>
   <div class="container mt-4">
-    <h1 class="mb-4">User Management Dashboard</h1>
+    <h1 class="mb-4">Admin Dashboard</h1>
+
+    <div class="card mb-5">
+      <div class="card-header">
+        User Registration Trends
+      </div>
+      <div class="card-body" style="height: 400px;">
+        <Bar v-if="chartData.labels && chartData.labels.length > 0" :data="chartData" :options="chartOptions" />
+        <div v-else class="d-flex align-items-center justify-content-center h-100 text-muted">
+          <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+          <span>Loading chart data...</span>
+        </div>
+      </div>
+    </div>
+    
+    <h2 class="mb-4">User Management</h2>
     
     <div class="d-flex justify-content-between mb-3">
       <input type="text" class="form-control me-3" placeholder="Search by name or email..." v-model="searchTerm">
@@ -33,7 +48,7 @@
       </table>
     </div>
     
-    <nav v-if="totalPages > 1">
+    <nav v-if="totalPages > 1" class="mt-4">
       <ul class="pagination justify-content-center">
         <li class="page-item" :class="{'disabled': currentPage === 1}">
           <a class="page-link" href="#" @click.prevent="currentPage--">Previous</a>
@@ -50,19 +65,69 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import users from '@/assets/mock_users.json';
-// *** 变化在这里 (2/2)：导入 Papa Parse ***
+import { ref, computed, onMounted } from 'vue';
 import Papa from 'papaparse';
+import { Bar } from 'vue-chartjs';
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+import mockUsers from '@/assets/mock_users.json';
 
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+
+const users = ref([]);
 const searchTerm = ref('');
 const sortKey = ref('first_name');
 const sortOrder = ref(1);
 const currentPage = ref(1);
 const itemsPerPage = 10;
+const chartData = ref({
+  labels: [],
+  datasets: []
+});
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false
+};
+
+onMounted(() => {
+  // *** 变化在这里：我们在加载数据时，自动修正错误的键名 ***
+  const normalizedUsers = mockUsers.map(user => {
+    // 创建一个新对象，包含所有原有属性
+    const newUser = { ...user };
+    // 如果存在带空格的错误键名，就把它赋值给正确的不带空格的键名
+    if (newUser.hasOwnProperty(' date_joined')) {
+      newUser.date_joined = newUser[' date_joined'];
+      // （可选）可以删除错误的键名
+      // delete newUser[' date_joined'];
+    }
+    return newUser;
+  });
+
+  users.value = normalizedUsers;
+  processChartData();
+});
+
+function processChartData() {
+  const countsByMonth = {};
+  for (const user of users.value) {
+    if (user.date_joined) { // 现在这个判断可以正常工作了
+      const month = new Date(user.date_joined).toLocaleString('en-US', { month: 'long', year: 'numeric' });
+      countsByMonth[month] = (countsByMonth[month] || 0) + 1;
+    }
+  }
+  const labels = Object.keys(countsByMonth).sort((a,b) => new Date(a) - new Date(b));
+  const data = labels.map(label => countsByMonth[label]);
+  chartData.value = {
+    labels,
+    datasets: [{
+      label: 'User Registrations',
+      backgroundColor: '#3E8A86',
+      data
+    }]
+  };
+}
 
 const filteredAndSortedData = computed(() => {
-  let data = [...users];
+  let data = [...users.value];
   if (searchTerm.value) {
     const term = searchTerm.value.toLowerCase();
     data = data.filter(user => 
@@ -101,36 +166,23 @@ function sortBy(key) {
   }
 }
 
-// *** 变化在这里 (2/2)：新增导出数据到 CSV 的函数 ***
 function exportDataToCSV() {
-  // 我们将导出当前经过筛选和排序后的 *所有* 数据，而不仅仅是当前页
   const dataToExport = filteredAndSortedData.value;
-
   if (dataToExport.length === 0) {
     alert('No data to export.');
     return;
   }
-
-  // 使用 Papa Parse 将 JSON 数组转换为 CSV 字符串
   const csv = Papa.unparse(dataToExport);
-
-  // 创建一个 Blob 对象
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  
-  // 创建一个临时的 a 标签用于下载
   const link = document.createElement('a');
   const url = URL.createObjectURL(blob);
-  
   link.setAttribute('href', url);
-  // 设置下载文件的名称，包含当天的日期
   link.setAttribute('download', `users_export_${new Date().toISOString().slice(0,10)}.csv`);
   link.style.visibility = 'hidden';
-  
-  // 将 a 标签添加到页面，模拟点击，然后移除
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  URL.revokeObjectURL(url); // 释放 URL 对象
+  URL.revokeObjectURL(url);
 }
 </script>
 

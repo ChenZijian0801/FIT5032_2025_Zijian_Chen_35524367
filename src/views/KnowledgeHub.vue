@@ -1,4 +1,3 @@
-
 <template>
   <div class="container mt-4">
     <h1 class="mb-4">Knowledge Hub</h1>
@@ -92,7 +91,7 @@ import { ref } from 'vue';
 import BookRating from '@/components/BookRating.vue';
 import relaxAudio from '@/assets/audio/just-relax-11157.mp3';
 
-
+// 移除了 'atomic-habits.jpg' 的导入
 import imgBodyKeepsScore from '@/assets/images/The Body Keeps the Score.jpg';
 import imgTalkToSomeone from '@/assets/images/Maybe You Should Talk to Someone.jpg';
 import imgSearchForMeaning from '@/assets/images/Search for Meaning.jpg';
@@ -100,7 +99,6 @@ import imgPatientGuide from '@/assets/images/Patient Guide to Mood and Anxiety.j
 import imgSolutionsToPanic from '@/assets/images/10 Simple Solutions to Panic.jpg';
 
 const activeView = ref('books');
-
 
 const books = ref([
     { 
@@ -111,15 +109,10 @@ const books = ref([
       img: imgBodyKeepsScore,
       description: 'Explores how trauma reshapes both body and brain, compromising sufferers\' capacities for pleasure, engagement, self-control, and trust.'
     },
-    { 
-      id: 2, 
-      title: 'Atomic Habits', 
-      author: 'James Clear', 
-      avgRating: 4.9, 
-     
-      img: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385l/40121378.jpg',
-      description: 'An easy & proven way to build good habits & break bad ones, essential for building routines that support mental well-being.'
-    },
+    // { // Atomic Habits 的对象已被删除
+    //   id: 2, 
+    //   ...
+    // },
     {
       id: 3, 
       title: 'Maybe You Should Talk to Someone',
@@ -153,7 +146,6 @@ const books = ref([
       description: 'Provides easy-to-implement strategies and techniques for managing panic attacks and living a more peaceful life.'
     }
 ]);
-
 
 const encyclopedia = ref([
   {

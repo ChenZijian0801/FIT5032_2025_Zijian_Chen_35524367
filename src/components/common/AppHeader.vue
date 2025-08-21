@@ -9,22 +9,33 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><router-link to="/" class="nav-link">Home</router-link></li>
-          <li class="nav-item"><router-link to="/knowledge-hub" class="nav-link">Knowledge Hub</router-link></li>
-          <li class="nav-item"><router-link to="/community" class="nav-link">Community</router-link></li>
-          <li class="nav-item"><router-link to="/map" class="nav-link">Map</router-link></li>
+          <li class="nav-item">
+            <router-link to="/" class="nav-link">Home</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/knowledge-hub" class="nav-link">Knowledge Hub</router-link>
+          </li>
+           <li class="nav-item">
+            <router-link to="/community" class="nav-link">Community</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/map" class="nav-link">Map</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/booking" class="nav-link">Booking</router-link>
+          </li>
           <li v-if="userStore.user.role === 'admin'" class="nav-item">
-           <router-link to="/admin" class="nav-link">User Management</router-link>
+            <router-link to="/admin" class="nav-link">User Management</router-link>
           </li>
         </ul>
         <div class="d-flex ms-lg-3">
-          <div v-if="!userStore.user.isLoggedIn">
-            <router-link to="/login" class="btn btn-primary">Log In</router-link>
-          </div>
-          <div v-else class="d-flex align-items-center">
-            <span class="navbar-text me-3">Welcome, {{ userStore.user.data?.email }}</span>
-            <button @click="handleLogout" class="btn btn-outline-secondary">Log Out</button>
-          </div>
+            <div v-if="!userStore.user.isLoggedIn">
+                <router-link to="/login" class="btn btn-primary">Log In</router-link>
+            </div>
+            <div v-else class="d-flex align-items-center">
+                <span class="navbar-text me-3">Welcome, {{ userStore.user.data?.email.split('@')[0] || 'User' }} ({{ userStore.user.role }})</span>
+                <button @click="userStore.logout()" class="btn btn-outline-secondary">Log Out</button>
+            </div>
         </div>
       </div>
     </nav>
@@ -34,11 +45,6 @@
 <script setup>
 import { useUserStore } from '@/stores/userStore';
 const userStore = useUserStore();
-
-// 将登出操作封装一下，以便未来扩展
-const handleLogout = () => {
-  userStore.logout();
-}
 </script>
 
 <style scoped>

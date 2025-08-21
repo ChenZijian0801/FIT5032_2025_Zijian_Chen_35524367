@@ -17,6 +17,23 @@
       </div>
     </div>
 
+    <div class="card text-center my-5 shadow-sm">
+      <div class="card-header">
+        Daily Wellness Tip
+      </div>
+      <div class="card-body">
+        <blockquote class="blockquote mb-0">
+          <p v-if="wellnessTip" class="fs-5">{{ wellnessTip }}</p>
+          <div v-else class="d-flex justify-content-center">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <span class="ms-2">Loading your daily inspiration...</span>
+          </div>
+        </blockquote>
+      </div>
+    </div>
+
     <div class="row text-center g-4">
       <div class="col-lg-4 col-md-6">
         <div class="card h-100 shadow-sm">
@@ -50,14 +67,32 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import heroImage from '@/assets/images/hero-image.jpg';
 
 const userStore = useUserStore();
+const wellnessTip = ref('');
+
+async function fetchWellnessTip() {
+  try {
+    const response = await fetch('/api/get-wellness-tip');
+    if (!response.ok) throw new Error('Network response was not ok');
+    const data = await response.json();
+    wellnessTip.value = data.tip;
+  } catch (error) {
+    // 提供一个备用的、优雅的默认提示
+    wellnessTip.value = "Remember to be kind to yourself today.";
+    console.error("Failed to fetch AI tip:", error);
+  }
+}
+
+onMounted(() => {
+  fetchWellnessTip();
+});
 </script>
 
 <style scoped>
-
 .hero-section {
   background-color: var(--subtle-bg-color);
 }

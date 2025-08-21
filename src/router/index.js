@@ -5,11 +5,7 @@ import { useUserStore } from '@/stores/userStore';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home
-    },
+    { path: '/', name: 'home', component: Home },
     {
       path: '/knowledge-hub',
       name: 'knowledge-hub',
@@ -22,16 +18,8 @@ const router = createRouter({
       component: () => import('@/views/Community.vue'),
       meta: { requiresAuth: true } 
     },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/views/Login.vue')
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: () => import('@/views/Register.vue')
-    },
+    { path: '/login', name: 'login', component: () => import('@/views/Login.vue') },
+    { path: '/register', name: 'register', component: () => import('@/views/Register.vue') },
     {
       path: '/admin',
       name: 'admin-dashboard',
@@ -44,11 +32,17 @@ const router = createRouter({
       component: () => import('@/views/MapView.vue'),
       meta: { requiresAuth: true }
     },
-    // *** 新增的联系页面路由 ***
     {
       path: '/contact',
       name: 'contact-us',
       component: () => import('@/views/ContactView.vue')
+    },
+    // *** 新增的预约页面路由 ***
+    {
+      path: '/booking',
+      name: 'booking',
+      component: () => import('@/views/BookingView.vue'),
+      meta: { requiresAuth: true } // 预约功能需要登录
     }
   ]
 })
