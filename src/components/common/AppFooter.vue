@@ -13,15 +13,15 @@
         <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
           <h6 class="text-uppercase fw-bold">Resources</h6>
            <hr class="mb-4 mt-0 d-inline-block mx-auto" :style="{ backgroundColor: 'var(--primary-hover-color)', height: '2px', width: '60px', border: 'none' }"/>
-          <p><router-link to="/knowledge-hub">Knowledge Hub</router-link></p>
-          <p><router-link to="/community">Community</router-link></p>
+          <p><router-link to="/knowledge-hub" class="text-white text-decoration-none">Knowledge Hub</router-link></p>
+          <p><router-link to="/community" class="text-white text-decoration-none">Community</router-link></p>
         </div>
 
         <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
           <h6 class="text-uppercase fw-bold">Contact</h6>
            <hr class="mb-4 mt-0 d-inline-block mx-auto" :style="{ backgroundColor: 'var(--primary-hover-color)', height: '2px', width: '60px', border: 'none' }"/>
           <p>Suzhou</p>
-          <p>contact@formentalhealth.org</p>
+          <p><router-link to="/contact" class="text-white text-decoration-none">contact@formentalhealth.org</router-link></p>
         </div>
       </div>
     </div>
@@ -38,10 +38,8 @@ const currentTime = ref('');
 let timer = null;
 
 const updateTime = () => {
-    currentTime.value = new Intl.DateTimeFormat('en-US', { // 使用 en-US 或 en-GB 格式化
-        // *** 变化在这里 (3/3) ***
-        // 中国标准时间的 IANA 时区标识符是 Asia/Shanghai
-        timeZone: 'Asia/Shanghai',
+    currentTime.value = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Asia/Shanghai', // Suzhou's time zone
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -56,7 +54,6 @@ onMounted(() => {
     updateTime();
     timer = setInterval(updateTime, 1000);
 });
-
 
 onUnmounted(() => {
     if (timer) {

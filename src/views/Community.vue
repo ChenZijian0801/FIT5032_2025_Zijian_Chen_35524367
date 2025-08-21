@@ -1,4 +1,3 @@
-
 <template>
   <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -6,9 +5,7 @@
       <button 
         v-if="userStore.user.isLoggedIn" 
         class="btn btn-primary" 
-        data-bs-toggle="modal" 
-        data-bs-target="#createCommunityModal"
-        @click="checkAdminPermission"
+        @click="handleCreateClick"
       >
         <i class="bi bi-plus-circle me-2"></i>Create Community
       </button>
@@ -51,19 +48,22 @@
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import CreateCommunityModal from '@/components/CreateCommunityModal.vue';
+import { Modal } from 'bootstrap';
+
+import imgAfricanDescent from '@/assets/images/black-african-american-communities-1024x462.webp';
+import imgNewParents from '@/assets/images/self-care-for-parents-2-1200x800.png';
+
 
 const userStore = useUserStore();
 
-// *** 变化在这里：创建了新的权限检查函数 ***
-const checkAdminPermission = (event) => {
-  // 检查用户角色是否不是 'admin'
-  if (userStore.user.role !== 'admin') {
-    // 如果不是管理员，阻止 Bootstrap 默认的打开弹窗行为
-    event.preventDefault();
-    // 并给出提示
+const handleCreateClick = () => {
+  if (userStore.user.role === 'admin') {
+    const modalElement = document.getElementById('createCommunityModal');
+    const modal = Modal.getOrCreateInstance(modalElement);
+    modal.show();
+  } else {
     alert('Access Denied: Only administrators can create new communities.');
   }
-  // 如果是管理员，则什么也不做，让 Bootstrap 的 data-* 属性正常工作
 };
 
 const communities = ref([
@@ -71,28 +71,35 @@ const communities = ref([
     id: 1,
     title: 'Communities of African descent',
     description: 'A supportive space for people of African descent to share and connect.',
-    img: 'black-african-american-communities-1024x462.webp',
+    
+    img: imgAfricanDescent, 
     isOwner: false
   },
   {
     id: 2,
     title: 'Students Mental Health Support',
     description: 'A community for students to discuss academic stress and mental wellness.',
-    img: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop',
+    
+    img: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto-format&fit=crop',
     isOwner: false
   },
   {
     id: 3,
     title: 'New Parents Peer Group',
     description: 'Share the joys and challenges of parenthood with fellow new parents.',
-    img: 'self-care-for-parents-2-1200x800.png',
+    
+    img: imgNewParents,
     isOwner: false
   }
 ]);
 
 const addNewCommunity = (newCommunity) => {
   communities.value.unshift(newCommunity);
-  // 现在我们不再需要用JS来手动关闭模态框了，Bootstrap会自己处理
+  const modalElement = document.getElementById('createCommunityModal');
+  const modalInstance = Modal.getInstance(modalElement);
+  if (modalInstance) {
+    modalInstance.hide();
+  }
 };
 
 const deleteCommunity = (communityIdToDelete) => {

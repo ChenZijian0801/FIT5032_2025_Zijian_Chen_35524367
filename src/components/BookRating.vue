@@ -80,12 +80,12 @@ const rate = (rating) => {
   font-weight: 700;
 }
 .rating-star {
-  color: #e0e0e0; /* 未点亮的星星颜色 */
+  color: #e0e0e0; 
   font-size: 1.2rem;
   transition: color 0.2s ease-in-out, transform 0.1s ease-in-out;
 }
 .rating-star.rated {
-  color: #ffc107; /* 点亮的星星颜色 */
+  color: #ffc107;
 }
 .rating-star.interactive {
   cursor: pointer;

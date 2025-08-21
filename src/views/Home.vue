@@ -57,7 +57,7 @@ const userStore = useUserStore();
 </script>
 
 <style scoped>
-/* 使用在 base.css 中定义的 CSS 变量 */
+
 .hero-section {
   background-color: var(--subtle-bg-color);
 }

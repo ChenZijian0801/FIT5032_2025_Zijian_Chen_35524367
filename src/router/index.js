@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
-
-// *** 新增：导入用户状态管理库 ***
 import { useUserStore } from '@/stores/userStore';
 
 const router = createRouter({
@@ -16,13 +14,13 @@ const router = createRouter({
       path: '/knowledge-hub',
       name: 'knowledge-hub',
       component: () => import('@/views/KnowledgeHub.vue'),
-      meta: { requiresAuth: true } // <-- 第1个需要保护的页面
+      meta: { requiresAuth: true } 
     },
     {
       path: '/community',
       name: 'community',
       component: () => import('@/views/Community.vue'),
-      meta: { requiresAuth: true } // <-- 第2个需要保护的页面
+      meta: { requiresAuth: true } 
     },
     {
       path: '/login',
@@ -33,23 +31,41 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: () => import('@/views/Register.vue')
+    },
+    {
+      path: '/admin',
+      name: 'admin-dashboard',
+      component: () => import('@/views/AdminDashboard.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true } 
+    },
+    {
+      path: '/map',
+      name: 'map-view',
+      component: () => import('@/views/MapView.vue'),
+      meta: { requiresAuth: true }
+    },
+    // *** 新增的联系页面路由 ***
+    {
+      path: '/contact',
+      name: 'contact-us',
+      component: () => import('@/views/ContactView.vue')
     }
   ]
 })
 
-// *** 新增：创建全局导航守卫 (门卫逻辑) ***
 router.beforeEach((to, from, next) => {
-  // 获取用户状态
   const userStore = useUserStore();
   const isLoggedIn = userStore.user.isLoggedIn;
+  const userRole = userStore.user.role;
 
-  // 检查目标路由是否需要认证
   if (to.meta.requiresAuth && !isLoggedIn) {
-    // 如果该页面需要认证，但用户未登录
-    // 则重定向到登录页面
     next({ name: 'login' });
-  } else {
-    // 否则，正常放行
+  } 
+  else if (to.meta.requiresAdmin && userRole !== 'admin') {
+    alert('Access Denied: This page is for administrators only.');
+    next({ name: 'home' });
+  } 
+  else {
     next();
   }
 });

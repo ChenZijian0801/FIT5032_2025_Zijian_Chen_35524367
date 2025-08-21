@@ -1,58 +1,72 @@
 import { defineStore } from 'pinia'
-
-
-const userDatabase = {
-  
-  users: JSON.parse(localStorage.getItem('userDatabase')) || {},
-  
-  
-  save() {
-    localStorage.setItem('userDatabase', JSON.stringify(this.users));
-  }
-};
-
+import { auth } from '@/firebaseConfig'
+import { 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signOut, 
+  onAuthStateChanged 
+} from "firebase/auth";
+import router from '@/router'; // 导入 router 以便在 action 中使用
 
 function getRoleFromEmail(email) {
-  if (email && email.includes('@admin')) {
-    return 'admin';
-  }
-  return 'member';
+  return email && email.includes('@admin') ? 'admin' : 'member';
 }
 
 export const useUserStore = defineStore('user', {
   state: () => ({
     user: {
       isLoggedIn: false,
-      name: null,
-      role: 'guest' 
+      data: null, 
+      role: 'guest'
     }
   }),
   actions: {
-    login(email, password) {
-      console.log(`登录用户: ${email}`);
-      const role = getRoleFromEmail(email); 
-      
-      if (userDatabase.users[email]) {
-        const registeredName = userDatabase.users[email].name;
-        this.user = { isLoggedIn: true, name: registeredName, role: role };
-      } else {
-        const simulatedName = email.split('@')[0];
-        this.user = { isLoggedIn: true, name: simulatedName, role: role };
+    // 初始化时调用，持续监听 Firebase 认证状态
+    init() {
+      onAuthStateChanged(auth, (firebaseUser) => {
+        if (firebaseUser) {
+          this.user.isLoggedIn = true;
+          this.user.data = { email: firebaseUser.email, uid: firebaseUser.uid };
+          this.user.role = getRoleFromEmail(firebaseUser.email);
+        } else {
+          this.user.isLoggedIn = false;
+          this.user.data = null;
+          this.user.role = 'guest';
+        }
+      });
+    },
+    
+    // 使用真实 Firebase 注册
+    async register(name, email, password) {
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        // 注册成功后，onAuthStateChanged 会自动更新状态，然后跳转
+        router.push('/');
+      } catch (error) {
+        alert(error.message);
       }
     },
     
-    logout() {
-      this.user = { isLoggedIn: false, name: null, role: 'guest' };
+    // 使用真实 Firebase 登录
+    async login(email, password) {
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        // 登录成功后，onAuthStateChanged 会自动更新状态，然后跳转
+        router.push('/community');
+      } catch (error) {
+        alert(error.message);
+      }
     },
     
-    register(name, email, password) {
-      console.log(`注册新用户: ${name}`);
-      const role = getRoleFromEmail(email); 
-      
-      userDatabase.users[email] = { name: name, password: password, role: role };
-      userDatabase.save();
-      
-      this.user = { isLoggedIn: true, name: name, role: role };
+    // 使用真实 Firebase 登出
+    async logout() {
+      try {
+        await signOut(auth);
+        // 登出成功后，onAuthStateChanged 会自动更新状态，然后跳转
+        router.push('/');
+      } catch (error) {
+        alert(error.message);
+      }
     }
   }
 })

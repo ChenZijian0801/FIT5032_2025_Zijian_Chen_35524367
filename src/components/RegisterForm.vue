@@ -49,10 +49,10 @@ const handleRegister = () => {
     return;
   }
   
-  // 确认这里调用的是 userStore.register，并将 name.value 传入
+
   userStore.register(name.value, email.value, password.value);
   
-  // 注册后跳转到首页
+
   router.push('/');
 };
 </script>

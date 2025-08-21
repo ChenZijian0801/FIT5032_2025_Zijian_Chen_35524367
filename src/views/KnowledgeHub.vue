@@ -92,7 +92,7 @@ import { ref } from 'vue';
 import BookRating from '@/components/BookRating.vue';
 import relaxAudio from '@/assets/audio/just-relax-11157.mp3';
 
-// *** 变化在这里：导入您本地的图片资源 ***
+
 import imgBodyKeepsScore from '@/assets/images/The Body Keeps the Score.jpg';
 import imgTalkToSomeone from '@/assets/images/Maybe You Should Talk to Someone.jpg';
 import imgSearchForMeaning from '@/assets/images/Search for Meaning.jpg';
@@ -101,7 +101,7 @@ import imgSolutionsToPanic from '@/assets/images/10 Simple Solutions to Panic.jp
 
 const activeView = ref('books');
 
-// *** 变化在这里：在数据中使用导入的图片变量 ***
+
 const books = ref([
     { 
       id: 1, 
@@ -116,7 +116,7 @@ const books = ref([
       title: 'Atomic Habits', 
       author: 'James Clear', 
       avgRating: 4.9, 
-      // 对于您本地没有的图片，暂时保留网络链接是可行的
+     
       img: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385l/40121378.jpg',
       description: 'An easy & proven way to build good habits & break bad ones, essential for building routines that support mental well-being.'
     },
@@ -154,7 +154,7 @@ const books = ref([
     }
 ]);
 
-// 心理知识百科数据
+
 const encyclopedia = ref([
   {
     id: 'q1',
